@@ -1,0 +1,124 @@
+پ۱) نام و وضعیت تمام تهیه‌کنندگان را بدهید.
+SELECT SNAME , STATUS
+	FROM S
+پ۲) پ۱ + که در شهر C1 هستند.
+SELECT SNAME , STATUS
+	FROM S
+	WHERE CITY = 'c1'
+پ۳) تمام اطلاعات تهیه‌کنندگان شهر C1 را بدهید.
+SELECT *
+	FROM S
+	WHERE CITY = 'c1'
+پ۴) پ۳ + که وضعیت آن ها بیشتر از ۱۰۰ است را بدهید.
+SELECT *
+	FROM S
+	WHERE CITY = 'c1'AND STATUS > 100
+پ۵) بیشینه وضعیت تهیه‌کنندگان شهر c1 را بدهید.
+SELECT MAX ( S.STATUS ) AS STMAX
+	FROM S AS S
+	WHERE S.CITY = 'c1'
+پ۶) مجموع قطعات تهیه‌شده در پروژه‌ی j1 را بدهید.
+SELECT SUM(QTY)
+	FROM SPJ
+	WHERE J# = 'J1'
+پ۷) تعداد تهیه‌کنندگان قطعه‌ی p1 در پروژه‌ی j1 را بدهید.
+SELECT COUNT(S#)
+	FROM SPJ
+	WHERE J#= 'J1' AND P# = 'P1'
+پ۸) تعداد تهیه‌کنندگان قطعه برای پروژه j1 را بدهید.
+SELECT COUNT(DISTINCT(S#))
+	FROM SPJ
+	WHERE J#= 'J1'
+پ۹) شماره هر پروژه را به همراه میانگین قطعات تهیه‌شده برای آن پروژه را بدهید.
+SELECT J#, COUNT(DISTINCT(S#)) , AVERAGE(QTY)
+	FROM SPJ
+	GROUP J#
+پ۱۰) پ۹ + به شرطی که بیشینه مقدار قطعات تهیه‌شده توسط هر تهیه‌کننده و هر قطعه در آن پروژه کمتر از ۲۰۰ باشد.
+SELCT J# , AVG(QTY)
+	FROM SPJ
+	GROUP BY J#
+	HAVING MAX(QTY) < 200
+	
+پ۱۱) شماره هر پروژه و میانگین قطعات تهیه‌شده توسط تهیه‌کننده s1 در آن پروژه را بدهید.
+SELECT J# , AVG(QTY)
+	FROM SPJ
+	WHERE S# = 'S1'
+	GROUP BY J#
+پ۱۲) شماره تهیه‌کنندگانی را بدهید که قطعه تهیه نکرده‌اند.
+(SELECT S# FROM S) EXCEPT (SELECT S# FROM SPJ)
+پ۱۳) میانگین قطعات تهیه شده توسط هر تهیه کننده در پروژه های J1 و J2 به صورت جداگانه.
+(SELECT S# , AVG(QTY) FROM SPJ WHERE J# = J1 GROUP BY S#)
+UNION
+(SELECT S# , AVG(QTY) FROM SPJ WHERE J# = J2 GROUP BY S#)
+پ۱۴ ) نام تهیه کنندگانی را بدهید که قطعه تهیه نکرده اند:
+SELECT SNAME
+	FROM S
+	WHERE S# NOT IN ( SELECT S# FROM SPJ)
+پ۱۵) نام و شماره قطعات آبی که در حداقل یک پروژه تهیه شده‌اند را بگویید.
+SELECT PNAME , P# 
+	FROM P
+	WHERE COLOR = 'BLUE'
+		AND
+		P# IN ( SELECT P# FROM SPJ)
+پ۱۶) نام و شماره قطعات آبی که در حداقل یک پروژه توسط یک تهیه‌کننده بیش از ۱۰۰ واحد از آن تهیه شده است.
+SELECT PNAME , P# 
+	FROM P
+	WHERE COLOR = 'BLUE'
+		AND
+		P# IN ( SELECT P# FROM SPJ WHERE QTY > 100)
+
+پ۱۷) نام تهیه‌کنندگان و پروژه‌های همشهر را بدهید.
+SELECT SNAME , JNAME
+	FROM S , J
+	WHERE S.CITY = J.CITY
+
+پ۱۸) نام تهیه‌کنندگانی را بدهید که برای پروژه های همشهر خود قطعه تهیه‌کرده باشند.
+SELECT SNAME
+	FROM S, J , SPJ
+	WHERE S.S# = SPJ.J# AND J.J#=SPJ.J# S.CITY=J.CITY
+
+پ۱۹) پ۱۸ + فقطه برای همشهر خود قطعه تهیه کرده‌اند.
+SELECT SNAME
+	FROM S
+	WHERE S# NOT IN (SELECT S#
+				FROM S, J , SPJ
+				WHERE S.S# = SPJ.J# AND J.J#=SPJ.J# S.CITY<>J.CITY
+)
+		AND S# IN ( SELECT S# FROM SPJ)
+پ۲۰) شماره تهیه‌کنندگان را بدهید که حداقل یک قطعه آبی تهیه‌کرده اند.
+
+SELECT S# FROM P,SPJ
+	WHERE P.P#=SPJ.P# AND P.COLOR='blue'
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
